@@ -67,5 +67,6 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "BoatGame.slnx"
+    "dotnet.defaultSolution": "BoatGame.slnx",
+    "dotnet.preferCSharpExtension": true
 }
