@@ -8,10 +8,10 @@ using Unity.Netcode;
 public class RepairStation : NetworkBehaviour, IInteractable
 {
     [Header("Repair Settings")]
-    [SerializeField] private float interactionRange = 2f;
-    [SerializeField] private float repairRate = 10f; // HP per second
-    [SerializeField] private float repairCost = 5f; // Resources per repair point (for future resource system)
-    [SerializeField] private bool requiresResources = true;
+    [SerializeField] private readonly float interactionRange = 2f;
+    [SerializeField] private readonly float repairRate = 10f; // HP per second
+    [SerializeField] private readonly float repairCost = 5f; // Resources per repair point (for future resource system)
+    [SerializeField] private readonly bool requiresResources = true;
 
     [Header("Visual Feedback")]
     [SerializeField] private GameObject repairEffect;
@@ -20,7 +20,7 @@ public class RepairStation : NetworkBehaviour, IInteractable
     private ShipHealth shipHealth;
     private GameObject currentRepairer;
     private bool isBeingRepaired = false;
-    private bool canRepair = true;
+    private readonly bool canRepair = true;
 
     public System.Action<bool> OnRepairStateChanged;
 
