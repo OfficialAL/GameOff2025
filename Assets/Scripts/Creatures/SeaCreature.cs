@@ -96,6 +96,12 @@ public class SeaCreature : NetworkBehaviour
 
     void HandleWandering()
     {
+        // Check for light sources to avoid if creature avoids light
+        if (avoidsLight)
+        {
+            CheckForLightSources();
+        }
+
         // Simple wandering behavior
         if (Vector2.Distance(transform.position, targetPosition.Value) < 1f)
         {
@@ -105,6 +111,26 @@ public class SeaCreature : NetworkBehaviour
         }
 
         MoveTowards(targetPosition.Value, moveSpeed * 0.5f);
+    }
+
+    void CheckForLightSources()
+    {
+        // Look for light sources (like ship lanterns) and avoid them
+        Light[] nearbyLights = FindObjectsByType<Light>(FindObjectsSortMode.None);
+        foreach (Light light in nearbyLights)
+        {
+            if (light.enabled && light.intensity > 0)
+            {
+                float distance = Vector2.Distance(transform.position, light.transform.position);
+                if (distance < light.range)
+                {
+                    // Move away from light
+                    Vector2 avoidDirection = ((Vector2)transform.position - (Vector2)light.transform.position).normalized;
+                    targetPosition.Value = (Vector2)transform.position + avoidDirection * wanderRadius;
+                    break;
+                }
+            }
+        }
     }
 
     void CheckForThreats()

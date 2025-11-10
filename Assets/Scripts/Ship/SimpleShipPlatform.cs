@@ -49,7 +49,7 @@ public class SimpleShipPlatform : MonoBehaviour
     void MovePlayersWithShip(Vector2 positionDelta, float rotationDelta)
     {
         // Find all players on the ship
-        SimplePlayerController[] playersOnShip = FindObjectsOfType<SimplePlayerController>();
+        SimplePlayerController[] playersOnShip = FindObjectsByType<SimplePlayerController>(FindObjectsSortMode.None);
         
         foreach (SimplePlayerController player in playersOnShip)
         {

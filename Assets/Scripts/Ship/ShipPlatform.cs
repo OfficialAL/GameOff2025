@@ -50,7 +50,7 @@ public class ShipPlatform : NetworkBehaviour
     void MovePlayersWithShip(Vector2 positionDelta, float rotationDelta)
     {
         // Find all players on the ship
-        PlayerController[] playersOnShip = FindObjectsOfType<PlayerController>();
+        PlayerController[] playersOnShip = FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
         
         foreach (PlayerController player in playersOnShip)
         {

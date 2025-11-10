@@ -10,7 +10,7 @@ public class RepairStation : NetworkBehaviour, IInteractable
     [Header("Repair Settings")]
     [SerializeField] private float interactionRange = 2f;
     [SerializeField] private float repairRate = 10f; // HP per second
-    [SerializeField] private float repairCost = 5f; // Resources per repair point
+    [SerializeField] private float repairCost = 5f; // Resources per repair point (for future resource system)
     [SerializeField] private bool requiresResources = true;
 
     [Header("Visual Feedback")]
@@ -122,8 +122,11 @@ public class RepairStation : NetworkBehaviour, IInteractable
         // Check if we have enough resources (if required)
         if (requiresResources)
         {
-            // TODO: Implement resource checking system
+            // Calculate resource cost based on repair amount
+            float resourceCost = repairAmount * repairCost;
+            // TODO: Implement resource checking system when resource manager is added
             // For now, assume we always have resources
+            Debug.Log($"Repair would cost {resourceCost:F1} resources");
         }
 
         // Apply repair to the ship

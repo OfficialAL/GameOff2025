@@ -82,6 +82,12 @@ public class GameManager : NetworkBehaviour
                 {
                     StartGame();
                 }
+                // Check if we've reached max players
+                else if (connectedPlayers.Value >= maxPlayers)
+                {
+                    Debug.Log($"Maximum players ({maxPlayers}) reached. Starting game.");
+                    StartGame();
+                }
                 break;
 
             case GameState.InProgress:

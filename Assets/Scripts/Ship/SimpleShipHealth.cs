@@ -11,7 +11,7 @@ public class SimpleShipHealth : MonoBehaviour
     [SerializeField] private float maxHullIntegrity = 100f;
     [SerializeField] private int damageZones = 6;
     [SerializeField] private float floodRate = 2f;
-    [SerializeField] private float pumpRate = 3f;
+    [SerializeField] private float pumpRate = 3f; // Used for water pumping mechanics
 
     [Header("Damage Effects")]
     [SerializeField] private GameObject holeEffectPrefab;
