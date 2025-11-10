@@ -9,7 +9,6 @@ public class ShipWheel : NetworkBehaviour, IInteractable
 {
     [Header("Wheel Settings")]
     [SerializeField] private float interactionRange = 2f;
-    [SerializeField] private bool requiresCaptainRole = false;
 
     private ShipController shipController;
     private GameObject currentOperator;
@@ -31,12 +30,7 @@ public class ShipWheel : NetworkBehaviour, IInteractable
         float distance = Vector2.Distance(transform.position, player.transform.position);
         if (distance > interactionRange) return false;
 
-        // Check if player has captain role (if required)
-        if (requiresCaptainRole)
-        {
-            PlayerRole playerRole = player.GetComponent<PlayerRole>();
-            if (playerRole == null || playerRole.GetRole() != PlayerRole.Role.Captain) return false;
-        }
+        // Since we don't use rigid roles, anyone can operate the wheel
 
         return true;
     }
@@ -56,11 +50,17 @@ public class ShipWheel : NetworkBehaviour, IInteractable
     public string GetInteractionText()
     {
         if (!isBeingOperated)
+        {
             return "Press E to take the wheel";
+        }
         else if (currentOperator != null)
+        {
             return $"Press E to stop steering (Currently: {currentOperator.name})";
+        }
         else
+        {
             return "Wheel is being operated";
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -169,41 +169,5 @@ public class ShipWheelInput : MonoBehaviour
         {
             playerController.enabled = true;
         }
-    }
-}
-
-/// <summary>
-/// Player role system for crew management
-/// </summary>
-public class PlayerRole : NetworkBehaviour
-{
-    public enum Role
-    {
-        None,
-        Captain,
-        Gunner,
-        Engineer,
-        Lookout
-    }
-
-    [SerializeField] private NetworkVariable<Role> currentRole = new NetworkVariable<Role>();
-
-    public Role GetRole() => currentRole.Value;
-
-    [ServerRpc(RequireOwnership = false)]
-    public void SetRoleServerRpc(Role newRole)
-    {
-        currentRole.Value = newRole;
-    }
-
-    public override void OnNetworkSpawn()
-    {
-        currentRole.OnValueChanged += OnRoleChanged;
-    }
-
-    void OnRoleChanged(Role oldRole, Role newRole)
-    {
-        Debug.Log($"Player role changed from {oldRole} to {newRole}");
-        // Update UI, permissions, etc.
     }
 }

@@ -186,4 +186,66 @@ public class ShipHealth : NetworkBehaviour
         if (zoneIndex < 0 || zoneIndex >= zoneIntegrity.Count) return 0f;
         return zoneIntegrity[zoneIndex];
     }
+
+    /// <summary>
+    /// Check if the ship is fully repaired
+    /// </summary>
+    public bool IsFullyRepaired()
+    {
+        if (!IsServer) return false;
+        
+        for (int i = 0; i < zoneIntegrity.Count; i++)
+        {
+            if (zoneIntegrity[i] < maxHullIntegrity)
+                return false;
+        }
+        return waterLevel.Value <= 0f;
+    }
+
+    /// <summary>
+    /// Repair damage to the ship
+    /// </summary>
+    public void RepairDamage(float repairAmount)
+    {
+        if (!IsServer) return;
+
+        // Find the most damaged zone and repair it
+        int mostDamagedZone = -1;
+        float lowestIntegrity = maxHullIntegrity;
+        
+        for (int i = 0; i < zoneIntegrity.Count; i++)
+        {
+            if (zoneIntegrity[i] < lowestIntegrity)
+            {
+                lowestIntegrity = zoneIntegrity[i];
+                mostDamagedZone = i;
+            }
+        }
+
+        // Repair the most damaged zone
+        if (mostDamagedZone >= 0)
+        {
+            float newIntegrity = Mathf.Min(zoneIntegrity[mostDamagedZone] + repairAmount, maxHullIntegrity);
+            zoneIntegrity[mostDamagedZone] = newIntegrity;
+            
+            OnZoneDamaged?.Invoke(mostDamagedZone, newIntegrity);
+        }
+
+        // Reduce water level if all zones are repaired
+        bool allZonesRepaired = true;
+        for (int i = 0; i < zoneIntegrity.Count; i++)
+        {
+            if (zoneIntegrity[i] < maxHullIntegrity)
+            {
+                allZonesRepaired = false;
+                break;
+            }
+        }
+
+        if (allZonesRepaired && waterLevel.Value > 0)
+        {
+            waterLevel.Value = Mathf.Max(0f, waterLevel.Value - (repairAmount * 0.5f));
+            OnWaterLevelChanged?.Invoke(waterLevel.Value);
+        }
+    }
 }

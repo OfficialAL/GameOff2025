@@ -18,6 +18,7 @@ public class PlayerController : NetworkBehaviour
     private Rigidbody2D rb;
     private Vector2 movementInput;
     private IInteractable currentInteractable;
+    private ShipPlatform currentShipPlatform;
 
     // Network variables for position synchronization
     private NetworkVariable<Vector2> networkPosition = new NetworkVariable<Vector2>();
@@ -155,6 +156,25 @@ public class PlayerController : NetworkBehaviour
         transform.position = targetPos;
     }
 
+    /// <summary>
+    /// Called by ShipPlatform to move player with the ship
+    /// </summary>
+    public void MoveWithPlatform(Vector3 newPosition)
+    {
+        if (IsOwner)
+        {
+            transform.position = newPosition;
+        }
+    }
+
+    /// <summary>
+    /// Set the current ship platform this player is on
+    /// </summary>
+    public void SetShipPlatform(ShipPlatform platform)
+    {
+        currentShipPlatform = platform;
+    }
+
     void OnDrawGizmosSelected()
     {
         if (interactionPoint != null)
@@ -163,14 +183,4 @@ public class PlayerController : NetworkBehaviour
             Gizmos.DrawWireSphere(interactionPoint.position, interactionRange);
         }
     }
-}
-
-/// <summary>
-/// Interface for objects that players can interact with
-/// </summary>
-public interface IInteractable
-{
-    bool CanInteract(GameObject player);
-    void Interact(GameObject player);
-    string GetInteractionText();
 }
