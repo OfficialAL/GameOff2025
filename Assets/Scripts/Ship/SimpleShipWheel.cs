@@ -74,6 +74,12 @@ public class SimpleShipWheel : MonoBehaviour, IInteractable
             playerController.enabled = false;
         }
 
+        // Start journey progress when wheel is taken
+        if (shipController != null)
+        {
+            shipController.StartJourney();
+        }
+
         Debug.Log($"{player.name} is now steering the ship!");
     }
 
@@ -93,6 +99,12 @@ public class SimpleShipWheel : MonoBehaviour, IInteractable
         currentOperator = null;
         isBeingOperated = false;
         OnOperatorChanged?.Invoke(null);
+
+        // Stop journey progress when wheel is released
+        if (shipController != null)
+        {
+            shipController.StopJourney();
+        }
     }
 
     void Update()

@@ -10,6 +10,14 @@ public class SimplePlayerController : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float interactionRange = 2f;
+    [SerializeField] private bool keepUpright = true; // Keep player upright (no rotation)
+    [SerializeField] private bool zeroGravity = true; // Top-down: disable gravity
+    [SerializeField] private bool freezeRotationZ = true; // Physics constraint backup
+    [SerializeField] private bool debugCollisions = false; // Enable to find hidden colliders
+    [SerializeField] private float debugOriginScanRadius = 2f; // Radius around (0,0) to scan
+    [SerializeField] private float debugScanInterval = 1.0f; // Seconds between scans
+    [Header("Collision Quality")]
+    [SerializeField] private CollisionDetectionMode2D collisionDetection = CollisionDetectionMode2D.ContinuousSpeculative;
 
     [Header("Components")]
     [SerializeField] private Transform interactionPoint;
@@ -25,12 +33,25 @@ public class SimplePlayerController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        // Ensure top-down friendly physics defaults
+        if (rb != null)
+        {
+            if (zeroGravity) rb.gravityScale = 0f;
+            if (freezeRotationZ) rb.constraints |= RigidbodyConstraints2D.FreezeRotation;
+            rb.collisionDetectionMode = collisionDetection;
+        }
     }
 
     void Update()
     {
         HandleInput();
         CheckForInteractables();
+
+        if (debugCollisions)
+        {
+            DebugScanOriginArea();
+        }
     }
 
     void FixedUpdate()
@@ -66,16 +87,20 @@ public class SimplePlayerController : MonoBehaviour
         Vector2 movement = movementInput * moveSpeed;
         rb.linearVelocity = movement;
 
-        // Rotate player to face movement direction
-        if (movement.magnitude > 0.1f)
+        // Keep players upright by default
+        if (keepUpright)
         {
-            float angle = Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg - 90f;
-            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            // Reset rotation each physics step
+            rb.MoveRotation(0f);
+            transform.rotation = Quaternion.identity;
         }
     }
 
     void CheckForInteractables()
     {
+        // Skip if interaction point not assigned
+        if (interactionPoint == null) return;
+        
         // Cast a circle to find nearby interactable objects
         Collider2D nearestInteractable = Physics2D.OverlapCircle(
             interactionPoint.position, 
@@ -120,5 +145,63 @@ public class SimplePlayerController : MonoBehaviour
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(interactionPoint.position, interactionRange);
         }
+
+        if (debugCollisions)
+        {
+            // Visualize origin scan area
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(Vector3.zero, debugOriginScanRadius);
+        }
+    }
+
+    // --- Debug helpers to locate hidden colliders near world origin (0,0) ---
+    private float _nextScanTime = 0f;
+    void DebugScanOriginArea()
+    {
+        if (Time.time < _nextScanTime) return;
+        _nextScanTime = Time.time + debugScanInterval;
+
+        // Scan for any colliders near (0,0)
+        Collider2D[] hits = Physics2D.OverlapCircleAll(Vector2.zero, debugOriginScanRadius, ~0);
+        if (hits != null && hits.Length > 0)
+        {
+            foreach (var h in hits)
+            {
+                if (h == null) continue;
+                string layerName = LayerMask.LayerToName(h.gameObject.layer);
+                string tagName = h.gameObject.tag;
+                Vector3 pos = h.bounds.center;
+                Debug.Log($"[OriginScan] Collider: {h.name}, Layer: {layerName}, Tag: {tagName}, Pos: {pos}", h);
+            }
+        }
+        else
+        {
+            Debug.Log("[OriginScan] No colliders found near (0,0)");
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!debugCollisions) return;
+        Debug.Log($"[PlayerCollision] ENTER with {collision.collider.name} on layer {LayerMask.LayerToName(collision.collider.gameObject.layer)} at contact {(collision.contacts.Length>0? (Vector3)collision.contacts[0].point : (Vector3)Vector2.zero)}", collision.collider);
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (!debugCollisions) return;
+        if (collision.contacts != null && collision.contacts.Length > 0)
+        {
+            var p = collision.contacts[0].point;
+            if (Vector2.Distance(p, Vector2.zero) <= debugOriginScanRadius)
+            {
+                Debug.Log($"[PlayerCollision] STAY near origin with {collision.collider.name} at {p}", collision.collider);
+            }
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!debugCollisions) return;
+        Debug.Log($"[PlayerTrigger] ENTER with {other.name} on layer {LayerMask.LayerToName(other.gameObject.layer)} at {(Vector3)other.bounds.center}", other);
     }
 }
