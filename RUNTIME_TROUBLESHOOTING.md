@@ -7,10 +7,27 @@
 - **Fix**: Removed rigid role requirements - anyone can operate any ship component
 - **Result**: No more "PlayerRole component not found" errors
 
-### 2. Meta File Warnings
-- **Issue**: ShaderGraph meta file warnings
-- **Status**: These are Unity internal warnings and don't affect gameplay
-- **Solution**: Refresh Unity assets (cleared PackageCache)
+### 2. Meta File Warnings & Package Cache Corruption
+- **Issue**: ShaderGraph meta file warnings and missing Unity package files
+- **Status**: Fixed by clearing corrupted package cache
+- **Solution**: Used robocopy to clear and regenerate PackageCache
+
+### 3. Duplicate RepairStation Class Compilation Errors
+- **Issue**: CS0101 errors - RepairStation class defined multiple times
+- **Cause**: Duplicate file `RepairStation-PC-PF52R.cs` (backup file)
+- **Fix**: Removed duplicate backup file
+- **Result**: All compilation errors resolved
+
+### 4. Unused Field Warnings (CS0414)
+- **Issue**: Warning about unused `pumpRate` field in SimpleShipHealth
+- **Fix**: Added proper usage in repair and water pumping mechanics
+- **Result**: Field now used for water removal efficiency calculations
+
+### 5. Input System Conflicts (InvalidOperationException)
+- **Issue**: "You are trying to read Input using the UnityEngine.Input class, but you have switched active Input handling to Input System package"
+- **Cause**: Simple scripts using old `Input.GetAxis()` while project uses new Input System
+- **Fix**: Updated SimplePlayerController and SimpleShipController to use `UnityEngine.InputSystem`
+- **Result**: No more input-related runtime errors
 
 ## Common Runtime Issues & Solutions
 
@@ -31,7 +48,20 @@
    - Players need: Rigidbody2D, Collider2D, PlayerController
    - Interactables need: Collider2D (set as Trigger)
 
-### 3. "Object reference not set" Errors
+### 3. Compilation Errors (CS0101 - Duplicate Classes)
+**Symptoms**: "Type already contains a definition" errors
+**Common Causes**:
+- Duplicate script files (often with `-PC-XXXXX` suffix)
+- Backup files created by Unity or system
+- Copy/paste mistakes
+
+**Solution**:
+1. **Identify duplicates**: Look for files like `ScriptName-PC-XXXXX.cs`
+2. **Remove duplicates**: Delete backup/duplicate files
+3. **Check file search**: Use `**/*-PC-*.cs` pattern to find all backup files
+4. **Restart Unity**: Let Unity recompile after cleanup
+
+### 4. "Object reference not set" Errors
 **Symptoms**: NullReferenceException errors
 **Common Causes**:
 

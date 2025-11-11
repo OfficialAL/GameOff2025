@@ -162,7 +162,20 @@ public class SimpleShipHealth : MonoBehaviour
 
         if (allZonesRepaired && waterLevel > 0)
         {
-            waterLevel = Mathf.Max(0f, waterLevel - (repairAmount * 0.5f));
+            // Use pumpRate for water removal efficiency
+            waterLevel = Mathf.Max(0f, waterLevel - (repairAmount * (pumpRate / 10f)));
+            OnWaterLevelChanged?.Invoke(waterLevel);
+        }
+    }
+
+    /// <summary>
+    /// Pump water out of the ship - called by repair stations
+    /// </summary>
+    public void PumpWater(float deltaTime)
+    {
+        if (waterLevel > 0)
+        {
+            waterLevel = Mathf.Max(0f, waterLevel - (pumpRate * deltaTime));
             OnWaterLevelChanged?.Invoke(waterLevel);
         }
     }

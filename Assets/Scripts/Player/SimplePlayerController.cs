@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Simple player controller without networking - for testing
@@ -39,13 +40,19 @@ public class SimplePlayerController : MonoBehaviour
 
     void HandleInput()
     {
-        // Movement input
-        movementInput.x = Input.GetAxisRaw("Horizontal");
-        movementInput.y = Input.GetAxisRaw("Vertical");
-        movementInput = movementInput.normalized;
+        // Movement input using new Input System
+        Vector2 moveInput = Vector2.zero;
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) moveInput.y += 1f;
+            if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) moveInput.y -= 1f;
+            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) moveInput.x -= 1f;
+            if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) moveInput.x += 1f;
+        }
+        movementInput = moveInput.normalized;
 
         // Interaction input
-        if (Input.GetKeyDown(KeyCode.E) && currentInteractable != null)
+        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame && currentInteractable != null)
         {
             if (currentInteractable.CanInteract(gameObject))
             {

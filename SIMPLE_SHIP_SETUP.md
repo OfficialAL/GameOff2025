@@ -35,7 +35,18 @@ The networking scripts are causing compilation errors because Unity Netcode isn'
    - `SimplePlayerController` script
 3. Create child `InteractionPoint` (empty GameObject)
 4. Assign InteractionPoint to SimplePlayerController
-5. Duplicate for 4 players total
+5. **Add Player Visual:**
+   - Create child GameObject named `PlayerSprite`
+   - Add `SpriteRenderer` component
+   - **Option A (Simple)**: Set Color to a bright color (Red, Blue, Green, Yellow)
+   - **Option B (Sprite)**: Assign a player sprite if you have one
+   - Set Scale to (0.8, 0.8, 1) so players are smaller than ship
+6. Set Player1 position to (-2, 1, 0) on ship deck
+7. Duplicate for 4 players total, positioning them:
+   - Player1: (-2, 1, 0) - Red color
+   - Player2: (2, 1, 0) - Blue color  
+   - Player3: (-2, -1, 0) - Green color
+   - Player4: (2, -1, 0) - Yellow color
 
 ### 5. Test Scene Setup
 1. Create new scene
@@ -54,6 +65,22 @@ The networking scripts are causing compilation errors because Unity Netcode isn'
 ✅ Interactive ship wheel
 ✅ Basic ship physics
 ✅ Multiple players can take turns steering
+
+## Quick Player Visual Setup:
+If you just want to see the players quickly:
+
+1. **Select each Player GameObject**
+2. **Add → SpriteRenderer** component
+3. **Set Sprite** to "Knob" (built-in Unity sprite) or any simple shape
+4. **Set Color** to different colors for each player:
+   - Player1: Red
+   - Player2: Blue  
+   - Player3: Green
+   - Player4: Yellow
+5. **Set Scale** to (0.8, 0.8, 1) to make them smaller
+6. **Set Sorting Layer** to "Default" or create a "Players" sorting layer
+
+Now you should see colored circles representing each player moving around the ship!
 
 ## What's Missing (will add networking later):
 ❌ Multiplayer synchronization

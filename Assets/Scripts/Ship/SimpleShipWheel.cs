@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Simple ship wheel without networking - for testing
@@ -99,9 +100,24 @@ public class SimpleShipWheel : MonoBehaviour, IInteractable
         // Handle steering input when someone is operating the wheel
         if (isBeingOperated && currentOperator != null && shipController != null)
         {
-            float throttle = Input.GetAxis("Vertical");
-            float steer = Input.GetAxis("Horizontal");
+            float throttle = 0f;
+            float steer = 0f;
+            
+            if (Keyboard.current != null)
+            {
+                if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) throttle += 1f;
+                if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) throttle -= 1f;
+                if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) steer -= 1f;
+                if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) steer += 1f;
+            }
+            
             shipController.SetShipControl(throttle, steer);
+            
+            // Visual feedback - rotate wheel based on steering input
+            if (steer != 0f)
+            {
+                transform.Rotate(0, 0, -steer * 90f * Time.deltaTime);
+            }
         }
     }
 

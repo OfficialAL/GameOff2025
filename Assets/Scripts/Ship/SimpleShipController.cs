@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Simple ship controller without networking - for testing and single player
@@ -45,9 +46,17 @@ public class SimpleShipController : MonoBehaviour
 
     void HandleInput()
     {
-        // Basic input for testing
-        throttleInput = Input.GetAxis("Vertical");
-        steerInput = Input.GetAxis("Horizontal");
+        // Basic input for testing using new Input System
+        throttleInput = 0f;
+        steerInput = 0f;
+        
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) throttleInput += 1f;
+            if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) throttleInput -= 1f;
+            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) steerInput -= 1f;
+            if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) steerInput += 1f;
+        }
     }
 
     void ApplyMovement()
