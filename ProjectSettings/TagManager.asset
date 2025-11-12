@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - UI
   layers:
   - Default
   - TransparentFX
@@ -11,8 +12,8 @@ TagManager:
   - Player
   - Water
   - UI
-  - 
-  - 
+  - Ship
+  - ShipPlatform
   - 
   - 
   - 
@@ -40,6 +41,18 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Ship
+    uniqueID: 1422834357
+    locked: 0
+  - name: ShipPlatform
+    uniqueID: 1268099111
+    locked: 0
+  - name: Player
+    uniqueID: 4046453141
+    locked: 0
+  - name: UI
+    uniqueID: 3097292601
     locked: 0
   m_RenderingLayers:
   - Default
