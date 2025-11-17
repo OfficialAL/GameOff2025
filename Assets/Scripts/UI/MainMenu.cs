@@ -4,19 +4,19 @@ using TMPro;
 
 /// <summary>
 /// Manages the Main Menu UI (Screen 2).
-[cite_start]/// Handles opening and closing modals for Host, Join, Controls, and Credits. [cite: 21]
+/// Handles opening and closing modals for Host, Join, Controls, and Credits. [cite: 21]
 /// </summary>
 public class MainMenu : MonoBehaviour
 {
     [Header("Modals")]
-    [cite_start][SerializeField] private GameObject hostModal; [cite: 28]
-    [cite_start][SerializeField] private GameObject joinModal; [cite: 28]
-    [cite_start][SerializeField] private GameObject controlsModal; [cite: 23]
+    [SerializeField] private GameObject hostModal; [cite: 28]
+    [SerializeField] private GameObject joinModal; [cite: 28]
+    [SerializeField] private GameObject controlsModal; [cite: 23]
     [SerializeField] private GameObject creditsModal; // [cite: 23]
 
     [Header("Input Fields")]
-    [cite_start][SerializeField] private TMP_InputField hostDisplayNameInput; [cite: 28]
-    [cite_start][SerializeField] private TMP_InputField joinDisplayNameInput; [cite: 28]
+    [SerializeField] private TMP_InputField hostDisplayNameInput; [cite: 28]
+    [SerializeField] private TMP_InputField joinDisplayNameInput; [cite: 28]
 
     private void Start()
     {
@@ -32,7 +32,7 @@ public class MainMenu : MonoBehaviour
         if (creditsModal) creditsModal.SetActive(false);
     }
 
-    [cite_start]// --- Button Clicks [cite: 21] ---
+    // --- Button Clicks [cite: 21] ---
 
     public void OnHostGameButton()
     {
@@ -65,7 +65,7 @@ public class MainMenu : MonoBehaviour
 
     // --- Display Name Logic ---
 
-    [cite_start]// Called by Host and Join input fields to update the persistent NetworkManager 
+    // Called by Host and Join input fields to update the persistent NetworkManager 
     public void OnHostNameChanged()
     {
         string validatedName = ValidateDisplayName(hostDisplayNameInput.text);
@@ -88,7 +88,7 @@ public class MainMenu : MonoBehaviour
 
     private string ValidateDisplayName(string name)
     {
-        [cite_start]// Enforce 16 character limit 
+        // Enforce 16 character limit 
         if (name.Length > 16)
         {
             name = name.Substring(0, 16);

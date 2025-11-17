@@ -2,24 +2,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // This file defines the core data structures used for network synchronization,
-[cite_start]// based on the PRD Data Requirements section .
+// based on the PRD Data Requirements section .
 
 namespace PirateCoop
 {
     /// <summary>
     /// Enum definitions used across multiple data structures.
     /// </summary>
-    [cite_start]public enum DeckPosition { Upper, Lower } [cite: 606, 617, 622]
-    [cite_start]public enum FacingDirection { Up, Down, Left, Right } [cite: 607]
-    [cite_start]public enum CarriedItemType { None, Lumber, Treasure, Blunderbuss, Teammate } [cite: 609]
-    [cite_start]public enum ShipSailState { Raised, Lowered } [cite: 594]
-    [cite_start]public enum DroppedItemType { Lumber, Treasure, Blunderbuss } [cite: 615]
-    [cite_start]public enum EnemyType { PirateCutlass, PiratePistol, PirateBlunderbuss, KrakenTentacle, Octopus } [cite: 620]
-    [cite_start]public enum HostileShipType { PirateShip, KrakenBody, Raft, Barrel } [cite: 627]
+    public enum DeckPosition { Upper, Lower } [cite: 606, 617, 622]
+    public enum FacingDirection { Up, Down, Left, Right } [cite: 607]
+    public enum CarriedItemType { None, Lumber, Treasure, Blunderbuss, Teammate } [cite: 609]
+    public enum ShipSailState { Raised, Lowered } [cite: 594]
+    public enum DroppedItemType { Lumber, Treasure, Blunderbuss } [cite: 615]
+    public enum EnemyType { PirateCutlass, PiratePistol, PirateBlunderbuss, KrakenTentacle, Octopus } [cite: 620]
+    public enum HostileShipType { PirateShip, KrakenBody, Raft, Barrel } [cite: 627]
 
 
     /// <summary>
-    [cite_start]/// Data Object 1: SharedShipState [cite: 592]
+    /// Data Object 1: SharedShipState [cite: 592]
     /// Synced state of the player's ship, owned by the host.
     /// </summary>
     [System.Serializable]
@@ -46,7 +46,7 @@ namespace PirateCoop
     }
 
     /// <summary>
-    [cite_start]/// Data Object 2: SharedGameState [cite: 597]
+    /// Data Object 2: SharedGameState [cite: 597]
     /// Overall state of the game session, managed by the host.
     /// </summary>
     [System.Serializable]
@@ -71,7 +71,7 @@ namespace PirateCoop
     }
 
     /// <summary>
-    [cite_start]/// Data Object 3: PlayerState [cite: 603]
+    /// Data Object 3: PlayerState [cite: 603]
     /// Synced state for an individual player.
     /// </summary>
     [System.Serializable]
@@ -90,7 +90,7 @@ namespace PirateCoop
     }
 
     /// <summary>
-    [cite_start]/// Data Object 4: DroppedItem [cite: 614]
+    /// Data Object 4: DroppedItem [cite: 614]
     /// Represents a physical item on the deck.
     /// </summary>
     [System.Serializable]
@@ -103,7 +103,7 @@ namespace PirateCoop
     }
 
     /// <summary>
-    [cite_start]/// Data Object 5: EnemyState [cite: 619]
+    /// Data Object 5: EnemyState [cite: 619]
     /// Represents an individual AI enemy.
     /// </summary>
     [System.Serializable]
@@ -118,7 +118,7 @@ namespace PirateCoop
     }
 
     /// <summary>
-    [cite_start]/// Data Object 6: HostileShipState [cite: 626]
+    /// Data Object 6: HostileShipState [cite: 626]
     /// Represents an enemy vessel.
     /// </summary>
     [System.Serializable]

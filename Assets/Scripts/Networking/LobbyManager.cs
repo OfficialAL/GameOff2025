@@ -4,13 +4,13 @@ using Photon.Realtime;
 using TMPro;
 
 /// <summary>
-[cite_start]/// Handles the logic for creating and joining Photon rooms. 
+/// Handles the logic for creating and joining Photon rooms. 
 /// This script lives in the MainMenuScene and is called by UI buttons.
 /// </summary>
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
     [Header("UI References")]
-    [cite_start][SerializeField] private TMP_InputField joinLobbyCodeField; [cite: 28]
+    [SerializeField] private TMP_InputField joinLobbyCodeField; [cite: 28]
     [SerializeField] private TextMeshProUGUI errorMessageText;
 
     private const string LOBBY_SCENE_NAME = "LobbyScene"; // 
@@ -22,7 +22,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
-    [cite_start]/// Called by the "Create Lobby" button. [cite: 29]
+    /// Called by the "Create Lobby" button. [cite: 29]
     /// </summary>
     public void OnCreateLobby()
     {
@@ -30,17 +30,17 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         
         RoomOptions roomOptions = new RoomOptions
         {
-            [cite_start]MaxPlayers = 4, // 3-4 players, so max is 4 
+            MaxPlayers = 4, // 3-4 players, so max is 4 
             IsVisible = true,
             IsOpen = true
         };
         
         // Using null for room name tells Photon to generate a unique code
-        [cite_start]PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default); [cite: 30]
+        PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default); [cite: 30]
     }
 
     /// <summary>
-    [cite_start]/// Called by the "Join Lobby" button. [cite: 29]
+    /// Called by the "Join Lobby" button. [cite: 29]
     /// </summary>
     public void OnJoinLobby()
     {
@@ -53,7 +53,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        [cite_start]PhotonNetwork.JoinRoom(lobbyCode); [cite: 30]
+        PhotonNetwork.JoinRoom(lobbyCode); [cite: 30]
     }
 
     private bool IsPlayerNameValid()
@@ -79,7 +79,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        [cite_start]ShowError($"Create Room Failed: {message}"); [cite: 31]
+        ShowError($"Create Room Failed: {message}"); [cite: 31]
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)

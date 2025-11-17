@@ -3,7 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 
 /// <summary>
-[cite_start]/// Persistent singleton that manages the core Photon connection state 
+/// Persistent singleton that manages the core Photon connection state 
 /// and player display name.
 /// </summary>
 public class NetworkManager : MonoBehaviourPunCallbacks

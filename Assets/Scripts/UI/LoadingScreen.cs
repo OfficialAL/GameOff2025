@@ -4,7 +4,7 @@ using System.Collections;
 
 /// <summary>
 /// Handles the Loading Scene (Screen 1).
-[cite_start]/// Displays logos and transitions to the Main Menu after a delay. [cite: 17, 18]
+/// Displays logos and transitions to the Main Menu after a delay. [cite: 17, 18]
 /// </summary>
 public class LoadingScreen : MonoBehaviour
 {
@@ -16,7 +16,7 @@ public class LoadingScreen : MonoBehaviour
 
     void Start()
     {
-        [cite_start]// Start the coroutine to auto-transition after the delay 
+        // Start the coroutine to auto-transition after the delay 
         StartCoroutine(LoadMainMenu());
     }
 
