@@ -20,11 +20,8 @@ public class DroppedItem : MonoBehaviour, IInteractable
         // Player picks this up. The player controller handles setting Carried_Item.
         player.PickUpItem(this);
 
-        // This item is now "collected," so destroy it across the network.
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.Destroy(gameObject);
-        }
+        // Tell the Master Client to destroy this item
+        this.photonView.RPC("RPC_RequestDestroy", RpcTarget.MasterClient);
     }
 
     public void StopInteract() { }
@@ -42,5 +39,12 @@ public class DroppedItem : MonoBehaviour, IInteractable
             return $"Pick Up {itemType} (E)";
         }
         return "[Hands Full]";
+    }
+
+    [PunRPC]
+    public void RPC_RequestDestroy()
+    {
+        // This code only runs on the Master Client
+        PhotonNetwork.Destroy(gameObject);
     }
 }
