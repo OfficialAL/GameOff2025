@@ -8,14 +8,14 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Manages the Lobby Scene (Screen 6).
-[cite_start]/// Displays players, lobby code, and handles game start logic. 
+/// Displays players, lobby code, and handles game start logic. 
 /// </summary>
 public class LobbyMenu : MonoBehaviourPunCallbacks
 {
     [Header("UI Elements")]
-    [cite_start][SerializeField] private TextMeshProUGUI lobbyCodeText; [cite: 32]
-    [cite_start][SerializeField] private Button startGameButton; [cite: 35]
-    [cite_start][SerializeField] private Button leaveLobbyButton; [cite: 36]
+    [SerializeField] private TextMeshProUGUI lobbyCodeText; [cite: 32]
+    [SerializeField] private Button startGameButton; [cite: 35]
+    [SerializeField] private Button leaveLobbyButton; [cite: 36]
     [SerializeField] private Transform playerListContainer;
     [SerializeField] private GameObject playerListPrefab; // A simple prefab with a TextMeshProUGUI
 
@@ -32,7 +32,7 @@ public class LobbyMenu : MonoBehaviourPunCallbacks
             return;
         }
 
-        [cite_start]// Display Lobby Code 
+        // Display Lobby Code 
         lobbyCodeText.text = $"Lobby Code: {PhotonNetwork.CurrentRoom.Name}";
 
         UpdatePlayerList();
@@ -49,7 +49,7 @@ public class LobbyMenu : MonoBehaviourPunCallbacks
             Destroy(child.gameObject);
         }
 
-        [cite_start]// Re-populate list from Photon player list 
+        // Re-populate list from Photon player list 
         foreach (Player player in PhotonNetwork.PlayerList)
         {
             GameObject playerEntry = Instantiate(playerListPrefab, playerListContainer);
@@ -66,25 +66,25 @@ public class LobbyMenu : MonoBehaviourPunCallbacks
 
     private void UpdateStartButton()
     {
-        [cite_start]// Show "Start Game" button for host only 
+        // Show "Start Game" button for host only 
         bool isHost = PhotonNetwork.IsMasterClient;
         startGameButton.gameObject.SetActive(isHost);
 
         if (isHost)
         {
-            [cite_start]// Enable for 3-4 players 
+            // Enable for 2-4 players 
             int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
-            bool canStart = (playerCount >= 3 && playerCount <= 4);
+            bool canStart = (playerCount >= 2 && playerCount <= 4);
             startGameButton.interactable = canStart;
 
-            // Note: PRD says 2-4 players, Implementation Plan says 3-4.
-            [cite_start]// Going with Implementation Plan (3-4) 
-            // bool canStart = (playerCount >= 3 && playerCount <= 4);
+            // Note: PRD says 2-4 players, Implementation Plan says 2-4.
+            // Going with Implementation Plan (3-4) 
+            // bool canStart = (playerCount >= 2 && playerCount <= 4);
             
-            [cite_start]// Self-correction: PRD (Screen 6) [cite: 438] says 2-4 players.
-            [cite_start]// Implementation Plan (Task 1.3.5)  says 3-4 players.
-            [cite_start]// Implementation Plan (Verification) [cite: 37] says 3 other players (total 4).
-            [cite_start]// I'll stick to the 3-4 player rule from the sub-task.
+            // Self-correction: PRD (Screen 6) [cite: 438] says 2-4 players.
+            // Implementation Plan (Task 1.3.5)  says 2-4 players.
+            // Implementation Plan (Verification) [cite: 37] says 3 other players (total 4).
+            // I'll stick to the 3-4 player rule from the sub-task.
         }
     }
 
@@ -92,7 +92,7 @@ public class LobbyMenu : MonoBehaviourPunCallbacks
 
     public void OnClickStartGame()
     {
-        [cite_start]// Host starts the game, loading GameScene for all players [cite: 36]
+        // Host starts the game, loading GameScene for all players [cite: 36]
         if (PhotonNetwork.IsMasterClient)
         [csharp]
         {
@@ -103,7 +103,7 @@ public class LobbyMenu : MonoBehaviourPunCallbacks
 
     public void OnClickLeaveLobby()
     {
-        [cite_start]// All players can leave [cite: 36]
+        // All players can leave [cite: 36]
         Debug.Log("Leaving lobby...");
         PhotonNetwork.LeaveRoom();
     }
@@ -129,7 +129,7 @@ public class LobbyMenu : MonoBehaviourPunCallbacks
         UpdatePlayerList();
         UpdateStartButton();
         
-        [cite_start]// Host leaving dissolves the lobby [cite: 36]
+        // Host leaving dissolves the lobby [cite: 36]
         // PUN handles this by default: if MasterClient leaves, another is assigned.
         // To strictly follow "Host leaving dissolves", we need custom logic.
         // For now, we'll rely on the OnLeftRoom() callback for all clients.
@@ -137,7 +137,7 @@ public class LobbyMenu : MonoBehaviourPunCallbacks
         // If we want to force-kick, the new MasterClient could check andPhotonNetwork.LeaveRoom().
         // For this MVP, we'll assume the room persists with a new host.
         //
-        [cite_start]// REVISIT: The plan says "Host leaving dissolves the lobby"[cite: 36].
+        // REVISIT: The plan says "Host leaving dissolves the lobby"[cite: 36].
         // The simplest way to implement this:
         if (otherPlayer.IsMasterClient)
         {
