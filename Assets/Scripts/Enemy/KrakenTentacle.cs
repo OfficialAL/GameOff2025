@@ -20,8 +20,10 @@ public class KrakenTentacle : EnemyAI
         retreatPosition = transform.position;
         // Disable NavMeshAgent, as this AI is scripted
         agent.enabled = false;
-        
-        StartCoroutine(SlamCycle());
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(SlamCycle());
+        }
     }
 
     private IEnumerator SlamCycle()
