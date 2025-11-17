@@ -1,5 +1,7 @@
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon; // For Hashtable
 using PirateCoop;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
@@ -143,6 +145,26 @@ public class GameManager : MonoBehaviourPunCallbacks
         
         // Force sails up
         ShipController.Instance.SetSailState(ShipSailState.Raised);
+
+        //Set host status for port room, and share.
+        if (PhotonNetwork.IsMasterClient)
+        {
+            SharedShipState shipState = ShipController.Instance.ShipState;
+            List<string> unownedUpgrades = new List<string>();
+            if (!shipState.Ship_Upgrades["reinforced"]) unownedUpgrades.Add("reinforced");
+            if (!shipState.Ship_Upgrades["beds"]) unownedUpgrades.Add("beds");
+            if (!shipState.Ship_Upgrades["cannons"]) unownedUpgrades.Add("cannons");
+
+            string upgradeKey = "";
+            if (unownedUpgrades.Count > 0)
+            {
+                upgradeKey = unownedUpgrades[Random.Range(0, unownedUpgrades.Count)];
+            }
+
+            Hashtable roomProps = new Hashtable();
+            roomProps.Add("CurrentPortUpgrade", upgradeKey); // Add or overwrite
+            PhotonNetwork.CurrentRoom.SetCustomProperties(roomProps);
+        }
     }
 
     public void SetGameState(GameState newState)

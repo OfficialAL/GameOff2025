@@ -32,10 +32,17 @@ public class PortMenu : MonoBehaviour
     {
         localPlayer = player;
         shipState = state;
-        
-        // Select a random upgrade
-        SelectRandomUpgrade();
-        
+
+        // Read the synced upgrade from the Room's Custom Properties
+        if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("CurrentPortUpgrade"))
+        {
+            randomUpgradeKey = (string)PhotonNetwork.CurrentRoom.CustomProperties["CurrentPortUpgrade"];
+        }
+        else
+        {
+            randomUpgradeKey = ""; // Failsafe
+        }
+
         UpdateUI();
     }
     
