@@ -1,0 +1,4 @@
+repository "BoatGame/GameOff2025@577643@cloud"
+  path "/"
+    smartbranch "/main/Initial Vibe Code"  
+     
