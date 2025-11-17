@@ -250,9 +250,18 @@ public class PlayerController : MonoBehaviourPun, IPunObservable, IInteractable
 	{
 		if (photonView.IsMine)
 		{
-			rb.AddForce(force, ForceMode2D.Impulse);
-		}
+            // Call an RPC on this player's view, targeting only the owner.
+            photonView.RPC("RPC_DoKnockback", photonView.Owner, force);
+        }
 	}
+
+    [PunRPC]
+    public void RPC_DoKnockback(Vector2 force)
+    {
+        // This code only runs on the client that owns this player.
+        rb.AddForce(force, ForceMode2D.Impulse);
+        // PhotonTransformView (or similar) will sync the resulting movement.
+    }
 
     [PunRPC]
     public void RPC_SetUnconscious(bool isUnconscious)
