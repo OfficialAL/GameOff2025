@@ -106,10 +106,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable, IInteractable
         HandleInteraction();
 
         // --- Debug ---
+        /*
         if (Input.GetKeyDown(KeyCode.F1))
         {
             TakeDamage(30);
         }
+        */
     }
 
     private void HandleMovement()
