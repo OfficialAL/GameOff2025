@@ -273,8 +273,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable, IInteractable
         {
             Debug.Log($"{State.Display_Name} is unconscious!");
             // Change sprite to "Knocked-Out"
-            spriteTransform.rotation = Quaternion.Euler(0, 0, 90f); 
-            
+            spriteTransform.rotation = Quaternion.Euler(0, 0, 90f);
+
+            col.enabled = isUnconscious; // Enable collider so they can be picked up
+
             if (photonView.IsMine)
             {
                 // Stop all actions
@@ -291,15 +293,34 @@ public class PlayerController : MonoBehaviourPun, IPunObservable, IInteractable
             Debug.Log($"{State.Display_Name} has been revived!");
             // Change sprite back to normal
             spriteTransform.rotation = Quaternion.identity;
-            
+            col.enabled = true;
+
             if (photonView.IsMine)
             {
+                rb.isKinematic = false;
                 State.Current_Health = (int)(maxHealth * 0.3f); // Revive at 30%
                 GameHUD.Instance.UpdateHealth(State.Current_Health);
             }
+
+            var ptv = GetComponent<PhotonTransformView>();
+            if (ptv != null) ptv.enabled = true;
         }
     }
-    
+
+    [PunRPC]
+    public void RPC_SnapToBed(Vector3 bedPosition)
+    {
+        // Snap position on all clients
+        transform.position = bedPosition;
+
+        // Disable physics, collider, and network sync
+        rb.isKinematic = true;
+        col.enabled = false;
+
+        var ptv = GetComponent<PhotonTransformView>(); // Assumes PhotonTransformView
+        if (ptv != null) ptv.enabled = false;
+    }
+
     [PunRPC]
     public void RPC_SetPhysicsActive(bool active, bool isCarried)
     {

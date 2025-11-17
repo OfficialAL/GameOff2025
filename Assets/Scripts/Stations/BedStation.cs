@@ -30,7 +30,9 @@ public class BedStation : MonoBehaviour, IInteractable
             
             if(revivingPlayer != null)
             {
-                revivingPlayer.transform.position = transform.position; // Snap to bed
+                // Tell the placed player to snap to the bed's position on all clients
+                revivingPlayer.photonView.RPC("RPC_SnapToBed", RpcTarget.All, transform.position); 
+                
                 activeCoroutine = StartCoroutine(ReviveProgress());
             }
         }
