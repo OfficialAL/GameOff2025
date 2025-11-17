@@ -73,6 +73,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable, IInteractable
             Camera.main.transform.localPosition = new Vector3(0, 0, -10);
             
             GameHUD.Instance.SetMaxHealth(State.Current_Health);
+
+            //Added with Initial Error fixes.
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.RegisterPlayer(this);
+            }
         }
     }
 	
@@ -334,10 +340,15 @@ public class PlayerController : MonoBehaviourPun, IPunObservable, IInteractable
     {
         State.Carried_Item = CarriedItemType.Teammate;
         carriedPlayer = targetPlayer;
-        
+
         // Sync physics state and parenting
-        targetPlayer.photonView.RPC("RPC_SetPhysicsActive", RpcTarget.All, false, true);
-        targetPlayer.transform.SetParent(transform);
+        //targetPlayer.photonView.RPC("RPC_SetPhysicsActive", RpcTarget.All, false, true);
+        //targetPlayer.transform.SetParent(transform);
+
+        // Call an RPC on the target player, telling them to be parented to this player
+        targetPlayer.photonView.RPC("RPC_GetCarried", RpcTarget.All, this.photonView.ViewID);
+
+
     }
     
     public PlayerController StopCarryingPlayer()
@@ -345,8 +356,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable, IInteractable
         if (carriedPlayer == null) return null;
         
         PlayerController droppedPlayer = carriedPlayer;
-        droppedPlayer.photonView.RPC("RPC_SetPhysicsActive", RpcTarget.All, true, false);
-        
+        //droppedPlayer.photonView.RPC("RPC_SetPhysicsActive", RpcTarget.All, true, false);
+        // Call an RPC on the target player to un-parent
+        droppedPlayer.photonView.RPC("RPC_GetDropped", RpcTarget.All);
+
+
         carriedPlayer = null;
         State.Carried_Item = CarriedItemType.None;
         return droppedPlayer;
@@ -391,6 +405,38 @@ public class PlayerController : MonoBehaviourPun, IPunObservable, IInteractable
             State.Carried_Item = (CarriedItemType)stream.ReceiveNext();
             
             // TODO: Update visuals based on synced state
+        }
+    }
+
+    [PunRPC]
+    public void RPC_GetCarried(int carrierViewID)
+    {
+        PhotonView carrierView = PhotonView.Find(carrierViewID);
+        if (carrierView != null)
+        {
+            // Parent this object to the carrier
+            transform.SetParent(carrierView.transform);
+            transform.localPosition = new Vector3(0, 0.5f, 0); // Position on carrier
+
+            // Disable physics and collider
+            rb.isKinematic = true;
+            col.enabled = false;
+        }
+    }
+
+    [PunRPC]
+    public void RPC_GetDropped()
+    {
+        // Un-parent
+        transform.SetParent(originalParent); // Return to root
+
+        // Re-enable collider
+        col.enabled = true;
+
+        // Re-enable physics only for the owner
+        if (photonView.IsMine)
+        {
+            rb.isKinematic = false;
         }
     }
 }
