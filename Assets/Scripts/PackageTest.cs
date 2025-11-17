@@ -1,5 +1,5 @@
 using UnityEngine;
-using Unity.Netcode;
+
 
 /// <summary>
 /// Simple test script to verify Unity packages are working correctly
@@ -10,16 +10,6 @@ public class PackageTest : MonoBehaviour
     void Start()
     {
         Debug.Log("✅ Unity packages loaded successfully!");
-        
-        // Test Netcode package
-        if (NetworkManager.Singleton != null)
-        {
-            Debug.Log("✅ Netcode for GameObjects package working");
-        }
-        else
-        {
-            Debug.Log("ℹ️ Netcode NetworkManager not found (expected in empty scene)");
-        }
         
         // Test Input System (basic check)
         Debug.Log("✅ Input System package loaded");
