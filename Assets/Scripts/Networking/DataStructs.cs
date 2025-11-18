@@ -9,29 +9,29 @@ namespace PirateCoop
     /// <summary>
     /// Enum definitions used across multiple data structures.
     /// </summary>
-    public enum DeckPosition { Upper, Lower } [cite: 606, 617, 622]
-    public enum FacingDirection { Up, Down, Left, Right } [cite: 607]
-    public enum CarriedItemType { None, Lumber, Treasure, Blunderbuss, Teammate } [cite: 609]
-    public enum ShipSailState { Raised, Lowered } [cite: 594]
-    public enum DroppedItemType { Lumber, Treasure, Blunderbuss } [cite: 615]
-    public enum EnemyType { PirateCutlass, PiratePistol, PirateBlunderbuss, KrakenTentacle, Octopus } [cite: 620]
-    public enum HostileShipType { PirateShip, KrakenBody, Raft, Barrel } [cite: 627]
+    public enum DeckPosition { Upper, Lower } 
+    public enum FacingDirection { Up, Down, Left, Right } 
+    public enum CarriedItemType { None, Lumber, Treasure, Blunderbuss, Teammate } 
+    public enum ShipSailState { Raised, Lowered } 
+    public enum DroppedItemType { Lumber, Treasure, Blunderbuss }
+    public enum EnemyType { PirateCutlass, PiratePistol, PirateBlunderbuss, KrakenTentacle, Octopus }
+    public enum HostileShipType { PirateShip, KrakenBody, Raft, Barrel }
 
 
     /// <summary>
-    /// Data Object 1: SharedShipState [cite: 592]
+    /// Data Object 1: SharedShipState
     /// Synced state of the player's ship, owned by the host.
     /// </summary>
     [System.Serializable]
     public class SharedShipState
     {
-        public Dictionary<string, int> Ship_Health; // [cite: 592]
-        public float Ship_Heading; // [cite: 593]
-        public float Ship_Speed; // [cite: 593]
-        public ShipSailState Ship_Sail; // [cite: 594]
-        public int Shared_Treasure_Count; // [cite: 595]
-        public Dictionary<string, int> Shared_Loot; // [cite: 596]
-        public Dictionary<string, bool> Ship_Upgrades; // [cite: 596]
+        public Dictionary<string, int> Ship_Health; 
+        public float Ship_Heading; 
+        public float Ship_Speed; 
+        public ShipSailState Ship_Sail; 
+        public int Shared_Treasure_Count; 
+        public Dictionary<string, int> Shared_Loot; 
+        public Dictionary<string, bool> Ship_Upgrades; 
 
         public SharedShipState()
         {
@@ -40,24 +40,24 @@ namespace PirateCoop
             Ship_Speed = 0f;
             Ship_Sail = ShipSailState.Raised;
             Shared_Treasure_Count = 0;
-            Shared_Loot = new Dictionary<string, int> { { "lumber", 0 }, { "blunderbuss", 0 } }; // [cite: 596]
-            Ship_Upgrades = new Dictionary<string, bool> { { "reinforced", false }, { "beds", false }, { "cannons", false } }; // [cite: 312, 596]
+            Shared_Loot = new Dictionary<string, int> { { "lumber", 0 }, { "blunderbuss", 0 } }; 
+            Ship_Upgrades = new Dictionary<string, bool> { { "reinforced", false }, { "beds", false }, { "cannons", false } }; 
         }
     }
 
     /// <summary>
-    /// Data Object 2: SharedGameState [cite: 597]
+    /// Data Object 2: SharedGameState 
     /// Overall state of the game session, managed by the host.
     /// </summary>
     [System.Serializable]
     public class SharedGameState
     {
-        public float Travel_Progress; // [cite: 597]
-        public List<EnemyState> Current_Enemies_List; // [cite: 598]
-        public List<HostileShipState> Current_HostileShip_List; // [cite: 599]
-        public List<DroppedItem> Current_DroppedItems_List; // [cite: 600]
-        public float Total_Distance; // [cite: 601]
-        public int Ports_Visited; // [cite: 601]
+        public float Travel_Progress; 
+        public List<EnemyState> Current_Enemies_List; 
+        public List<HostileShipState> Current_HostileShip_List; 
+        public List<DroppedItem> Current_DroppedItems_List; 
+        public float Total_Distance;
+        public int Ports_Visited; 
 
         public SharedGameState()
         {
@@ -71,22 +71,22 @@ namespace PirateCoop
     }
 
     /// <summary>
-    /// Data Object 3: PlayerState [cite: 603]
+    /// Data Object 3: PlayerState 
     /// Synced state for an individual player.
     /// </summary>
     [System.Serializable]
     public class PlayerState
     {
-        public string Player_ID; // [cite: 603]
-        public string Display_Name; // [cite: 604]
-        public Vector2 Position; // [cite: 605]
-        public DeckPosition Position_deck; // [cite: 606]
-        public FacingDirection Facing_Direction; // [cite: 607]
-        public int Current_Health; // [cite: 608]
-        public CarriedItemType Carried_Item; // [cite: 609]
-        public bool Is_Unconscious; // [cite: 610]
-        public string Interacting_Station; // [cite: 611]
-        public bool Is_Disconnected; // [cite: 612]
+        public string Player_ID; 
+        public string Display_Name; 
+        public Vector2 Position; 
+        public DeckPosition Position_deck; 
+        public FacingDirection Facing_Direction; 
+        public int Current_Health; 
+        public CarriedItemType Carried_Item; 
+        public bool Is_Unconscious; 
+        public string Interacting_Station; 
+        public bool Is_Disconnected; 
     }
 
     /// <summary>
@@ -96,40 +96,40 @@ namespace PirateCoop
     [System.Serializable]
     public class DroppedItem
     {
-        public string Item_ID; // [cite: 614]
-        public DroppedItemType Item_Type; // [cite: 615]
-        public Vector2 Position; // [cite: 616]
-        public DeckPosition Position_deck; // [cite: 617]
+        public string Item_ID; 
+        public DroppedItemType Item_Type; 
+        public Vector2 Position; 
+        public DeckPosition Position_deck; 
     }
 
     /// <summary>
-    /// Data Object 5: EnemyState [cite: 619]
+    /// Data Object 5: EnemyState 
     /// Represents an individual AI enemy.
     /// </summary>
     [System.Serializable]
     public class EnemyState
     {
-        public string Enemy_ID; // [cite: 619]
-        public EnemyType Enemy_Type; // [cite: 620]
-        public Vector2 Position; // [cite: 621]
-        public DeckPosition Position_deck; // [cite: 622]
-        public int Current_Health; // [cite: 623]
-        public bool Is_Boarding; // [cite: 624]
+        public string Enemy_ID; 
+        public EnemyType Enemy_Type; 
+        public Vector2 Position; 
+        public DeckPosition Position_deck; 
+        public int Current_Health; 
+        public bool Is_Boarding; 
     }
 
     /// <summary>
-    /// Data Object 6: HostileShipState [cite: 626]
+    /// Data Object 6: HostileShipState 
     /// Represents an enemy vessel.
     /// </summary>
     [System.Serializable]
     public class HostileShipState
     {
-        public string HostileShip_ID; // [cite: 626]
-        public HostileShipType Enemy_Type; // [cite: 627]
-        public Vector2 Position; // [cite: 628]
-        public float Ship_Heading; // [cite: 629]
-        public int Current_Health; // [cite: 630]
-        public bool Is_Boarding; // [cite: 631]
-        public List<EnemyState> Carrying_Enemies; // [cite: 632]
+        public string HostileShip_ID; 
+        public HostileShipType Enemy_Type; 
+        public Vector2 Position; 
+        public float Ship_Heading; 
+        public int Current_Health; 
+        public bool Is_Boarding; 
+        public List<EnemyState> Carrying_Enemies; 
     }
 }
