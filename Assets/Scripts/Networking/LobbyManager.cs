@@ -10,7 +10,7 @@ using TMPro;
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
     [Header("UI References")]
-    [SerializeField] private TMP_InputField joinLobbyCodeField; [cite: 28]
+    [SerializeField] private TMP_InputField joinLobbyCodeField; 
     [SerializeField] private TextMeshProUGUI errorMessageText;
 
     private const string LOBBY_SCENE_NAME = "LobbyScene"; // 
@@ -22,7 +22,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
-    /// Called by the "Create Lobby" button. [cite: 29]
+    /// Called by the "Create Lobby" button.
     /// </summary>
     public void OnCreateLobby()
     {
@@ -36,11 +36,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         };
         
         // Using null for room name tells Photon to generate a unique code
-        PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default); [cite: 30]
+        PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default); 
     }
 
     /// <summary>
-    /// Called by the "Join Lobby" button. [cite: 29]
+    /// Called by the "Join Lobby" button. 
     /// </summary>
     public void OnJoinLobby()
     {
@@ -53,7 +53,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        PhotonNetwork.JoinRoom(lobbyCode); [cite: 30]
+        PhotonNetwork.JoinRoom(lobbyCode);
     }
 
     private bool IsPlayerNameValid()
@@ -74,17 +74,17 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         // Success! Transition all players to the Lobby Scene.
         Debug.Log($"Successfully joined room: {PhotonNetwork.CurrentRoom.Name}");
-        PhotonNetwork.LoadLevel(LOBBY_SCENE_NAME); // 
+        PhotonNetwork.LoadLevel(LOBBY_SCENE_NAME); 
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        ShowError($"Create Room Failed: {message}"); [cite: 31]
+        ShowError($"Create Room Failed: {message}"); 
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        ShowError($"Join Room Failed: {message}"); // [cite: 31]
+        ShowError($"Join Room Failed: {message}"); 
         // Common errors: 32765 (RoomFull), 32758 (GameDoesNotExist)
     }
 
